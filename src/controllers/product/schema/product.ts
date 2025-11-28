@@ -10,6 +10,7 @@ export const createProductSchema = z.object({
     price: z.number().min(0),
     image: z.string().min(1),
     category_id: z.number().min(1),
+    description: z.string().optional(),
 });
 
 export const updateProductSchema = z.object({

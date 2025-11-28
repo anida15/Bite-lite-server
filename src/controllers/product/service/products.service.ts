@@ -10,7 +10,10 @@ interface Response {
 class ProductsService {
     public static async getAllProducts(limit: number, page: number, category_id?: number): Promise<Response> {
         try {
-            const { error } = getAllProductsSchema.safeParse({ limit, page, category_id });
+            const validLimit = Number(limit) || 10;
+            const validPage = Number(page) || 1;
+
+            const { error } = getAllProductsSchema.safeParse({ limit: validLimit, page: validPage, category_id });
             if (error) {
                 return {
                     data: null,
@@ -18,9 +21,14 @@ class ProductsService {
                     message: error.message,
                 };
             }
+
             const whereClause: any = {};
-            if (category_id !== undefined && category_id !== null) {
-                whereClause.category_id = category_id;
+            if (
+                category_id !== undefined &&
+                category_id !== null &&
+                !isNaN(Number(category_id))
+            ) {
+                whereClause.category_id = Number(category_id);
             }
 
             const total = await Product.count({
@@ -29,18 +37,18 @@ class ProductsService {
 
             const products = await Product.findAll({
                 where: whereClause,
-                limit: limit,
-                offset: (page - 1) * limit,
+                limit: validLimit,
+                offset: (validPage - 1) * validLimit,
             });
 
-            const totalPages = Math.ceil(total / limit);
+            const totalPages = Math.ceil(total / validLimit);
 
             return {
                 data: {
                     products: products,
                     total: total,
-                    page: page,
-                    limit: limit,
+                    page: validPage,
+                    limit: validLimit,
                     totalPages: totalPages,
                 },
                 status: 200,

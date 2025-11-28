@@ -9,6 +9,7 @@ export interface ProductAttributes {
   price: number;
   image: string;
   category_id?: number;
+  description?: string;
   readonly created_at: Date;
   readonly updated_at: Date;
 }
@@ -25,6 +26,7 @@ class Product
   public price!: number;
   public image!: string;
   public category_id?: number;
+  public description?: string;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
   public Category?: string;
@@ -53,9 +55,15 @@ Product.init(
         key: "id",
       },
     },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue: "",
+    },
     image: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "",
     },
     created_at: {
       type: DataTypes.DATE,
