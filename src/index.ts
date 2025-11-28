@@ -6,7 +6,7 @@ import { JwtPayload } from "jsonwebtoken";
 import sequelize from "./config/database";
 import products from "./routes/products";
 import categories from "./routes/categories";
- 
+import sales from "./routes/sales";
 
 declare global {
   namespace Express {
@@ -71,6 +71,7 @@ app.use(express.json());
 // Routes
 app.use("/products", products);
 app.use("/categories", categories);
+app.use("/sales", sales);
  
 sequelize
   .authenticate()
