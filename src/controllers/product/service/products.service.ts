@@ -1,5 +1,5 @@
 import Product from "../../../models/Product";
-import { createProductSchema, deleteProductSchema, getProductByIdSchema, updateProductSchema } from "../schema/product";
+import { createProductSchema, deleteProductSchema, getAllProductsSchema, getProductByIdSchema, updateProductSchema } from "../schema/product";
 
 interface Response {
     data?: Product[] | null | unknown;
@@ -10,7 +10,7 @@ interface Response {
 class ProductsService {
     public static async getAllProducts(limit: number, page: number, category_id?: number): Promise<Response> {
         try {
-            const { error } = createProductSchema.safeParse({ limit, page, category_id });
+            const { error } = getAllProductsSchema.safeParse({ limit, page, category_id });
             if (error) {
                 return {
                     data: null,

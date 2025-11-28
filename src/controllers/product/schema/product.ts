@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+export const getAllProductsSchema = z.object({
+    page: z.number().min(1).optional(),
+    limit: z.number().min(1).optional(),
+});
+
 export const createProductSchema = z.object({
     name: z.string().min(1),
     price: z.number().min(0),

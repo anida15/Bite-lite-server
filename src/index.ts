@@ -8,6 +8,11 @@ import products from "./routes/products";
 import categories from "./routes/categories";
 import sales from "./routes/sales";
 
+// Import models to register them with Sequelize
+// import "./models/Category";
+// import "./models/Product";
+// import "./models/Sale";
+
 declare global {
   namespace Express {
     interface Request {
@@ -77,6 +82,10 @@ sequelize
   .authenticate()
   .then(async () => {
     console.log("Connection has been established successfully.");
+
+    // Sync all models to create tables in SQLite
+    // await sequelize.sync({ alter: true });
+    console.log("Database tables synchronized successfully.");
 
     app.listen(Number(PORT), HOST, () => {
       console.log(`Server running at http://${HOST}:${PORT}`);
