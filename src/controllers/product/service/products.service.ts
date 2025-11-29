@@ -1,3 +1,4 @@
+import Category from "../../../models/Category";
 import Product from "../../../models/Product";
 import { createProductSchema, deleteProductSchema, getAllProductsSchema, getProductByIdSchema, updateProductSchema } from "../schema/product";
 
@@ -39,6 +40,12 @@ class ProductsService {
                 where: whereClause,
                 limit: validLimit,
                 offset: (validPage - 1) * validLimit,
+                include: [
+                    {
+                        model: Category,
+                        as: "Category",
+                    },
+                ],
             });
 
             const totalPages = Math.ceil(total / validLimit);
@@ -80,7 +87,13 @@ class ProductsService {
                     message: error.message,
                 };
             }
-            const product = await Product.findByPk(id);
+            const product = await Product.findByPk(id, {
+                include: [
+                    {
+                    model: Category,
+                    as: "Category",
+                },
+            ]});
             if (!product) {
                 return {
                     data: {
