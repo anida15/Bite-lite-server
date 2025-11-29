@@ -9,6 +9,7 @@ class ProductController {
             const limit = req.query.limit ? Number(req.query.limit) : 10;
             const page = req.query.page ? Number(req.query.page) : 1;
             const category_id = req.query.category_id ? Number(req.query.category_id) : undefined;
+            const search = req.query.search ? String(req.query.search) : undefined;
 
             if (isNaN(limit) || limit < 1) {
                  res.status(400).json({ 
@@ -25,7 +26,7 @@ class ProductController {
                 return;
             }
 
-            const products = await ProductsService.getAllProducts(limit, page, category_id);
+            const products = await ProductsService.getAllProducts(limit, page, category_id, search);
             res.status(products.status).json(products);
             return;
         } catch (error: unknown) {

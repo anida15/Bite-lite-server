@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import Category from "../../../models/Category";
 import Product from "../../../models/Product";
 import { createProductSchema, deleteProductSchema, getAllProductsSchema, getProductByIdSchema, updateProductSchema } from "../schema/product";
@@ -9,12 +10,12 @@ interface Response {
 }
 
 class ProductsService {
-    public static async getAllProducts(limit: number, page: number, category_id?: number): Promise<Response> {
+    public static async getAllProducts(limit: number, page: number, category_id?: number, search?: string): Promise<Response> {
         try {
             const validLimit = Number(limit) || 10;
             const validPage = Number(page) || 1;
 
-            const { error } = getAllProductsSchema.safeParse({ limit: validLimit, page: validPage, category_id });
+            const { error } = getAllProductsSchema.safeParse({ limit: validLimit, page: validPage, category_id, search });
             if (error) {
                 return {
                     data: null,
@@ -30,6 +31,10 @@ class ProductsService {
                 !isNaN(Number(category_id))
             ) {
                 whereClause.category_id = Number(category_id);
+            }
+
+            if (search) {
+                whereClause.name = { [Op.like]: `%${search}%` };
             }
 
             const total = await Product.count({
