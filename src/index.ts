@@ -7,6 +7,10 @@ import sequelize from "./config/database";
 import products from "./routes/products";
 import categories from "./routes/categories";
 import sales from "./routes/sales";
+
+import Product from "./models/Product";
+import Category from "./models/Category";
+import Sale from "./models/Sale";
  
 
 declare global {
@@ -76,6 +80,10 @@ sequelize
   .authenticate()
   .then(async () => {
     console.log("Connection has been established successfully.");
+    await Category.sync( { alter: true });
+    await Product.sync( { alter: true });
+  
+    await Sale.sync( { alter: true });
     app.listen(Number(PORT), HOST, () => {
       console.log(`Server running at http://${HOST}:${PORT}`);
     });

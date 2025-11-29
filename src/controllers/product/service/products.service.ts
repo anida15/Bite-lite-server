@@ -108,9 +108,9 @@ class ProductsService {
         }
     }
 
-    public static async createProduct(product: Product): Promise<Response> {
+    public static async createProduct( { name, price, description, image, category_id }: { name: string, price: number, description: string, image: string, category_id: number }): Promise<Response> {
         try {
-            const { error } = createProductSchema.safeParse(product);
+            const { error } = createProductSchema.safeParse({ name, price, description, image, category_id });
             if (error) {
                 return {
                     data: null,
@@ -118,7 +118,7 @@ class ProductsService {
                     message: error.message,
                 };
             }
-            const newProduct = await Product.create(product);
+            const newProduct = await Product.create({ name, price, description, image, category_id });
             return {
                 data: {
                     product: newProduct,
@@ -137,9 +137,55 @@ class ProductsService {
         }
     }
 
-    public static async updateProduct(id: string, product: Product): Promise<Response> {
+    public static async createBulkProducts(products: { name: string, price: number, description?: string, image: string, category_id: number }[]): Promise<Response> {
         try {
-            const { error } = updateProductSchema.safeParse({ id, product });
+            if (!Array.isArray(products) || products.length === 0) {
+                return {
+                    data: null,
+                    status: 400,
+                    message: "Products must be a non-empty array",
+                };
+            }
+
+            const validationErrors: string[] = [];
+            
+            products.forEach((product, index: number) => {
+                const result = createProductSchema.safeParse(product);
+                if (!result.success) {
+                    validationErrors.push(`Product at index ${index}: ${result.error.issues.map((e: any) => e.message).join(", ")}`);
+                }
+            });
+
+            if (validationErrors.length > 0) {
+                return {
+                    data: { errors: validationErrors },
+                    status: 400,
+                    message: "Validation errors",
+                };
+            }
+
+            const bulkProducts = await Product.bulkCreate(products, {
+                validate: true,
+                returning: true,
+            });
+
+            return {
+                data: bulkProducts,
+                status: 201,
+                message: `${bulkProducts.length} products created successfully`,
+            };
+        } catch (error: unknown) {
+            return {
+                data: null,
+                status: 500,
+                message: "Error creating bulk products: " + error,
+            };
+        }
+    }
+
+    public static async updateProduct(id: string, { name, price, description, image, category_id }: { name: string, price: number, description: string, image: string, category_id: number }): Promise<Response> {
+        try {
+            const { error } = updateProductSchema.safeParse({ id, name, price, description, image, category_id });
             if (error) {
                 return {
                     data: null,
@@ -147,7 +193,7 @@ class ProductsService {
                     message: error.message,
                 };
             }
-            const updatedProduct = await Product.update(product, { where: { id } });
+            const updatedProduct = await Product.update({ name, price, description, image, category_id }, { where: { id } });
             if (!updatedProduct) {
                 return {
                     data: {

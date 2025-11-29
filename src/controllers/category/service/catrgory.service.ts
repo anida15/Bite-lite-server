@@ -72,9 +72,9 @@ class CategoryService {
             };
         }
     }
-    public static async createCategory(category: Category): Promise<Response> {
+    public static async createCategory( { name, description }: { name: string, description: string }): Promise<Response> {
         try {
-            const { error } = createCategorySchema.safeParse(category);
+            const { error } = createCategorySchema.safeParse({ name, description });
             if (error) {
                 return {
                     data: null,
@@ -82,7 +82,7 @@ class CategoryService {
                     message: error.message,
                 };
             }
-            const newCategory = await Category.create(category);
+            const newCategory = await Category.create({ name, description });
             return {
                 data: newCategory,
                 status: 201,
@@ -97,9 +97,55 @@ class CategoryService {
             };
         }
     }
-    public static async updateCategory(id: string, category: Category): Promise<Response> {
+    public static async createBulkCategories(categories: { name: string, description: string }[]): Promise<Response> {
         try {
-            const { error } = updateCategorySchema.safeParse({ id, category });
+            if (!Array.isArray(categories) || categories.length === 0) {
+                return {
+                    data: null,
+                    status: 400,
+                    message: "Categories must be a non-empty array",
+                };
+            }
+
+            const validationErrors: string[] = [];
+            
+            categories.forEach((category, index: number) => {
+                const result = createCategorySchema.safeParse(category);
+                if (!result.success) {
+                    validationErrors.push(`Category at index ${index}: ${result.error.issues.map((e: any) => e.message).join(", ")}`);
+                }
+            });
+
+            if (validationErrors.length > 0) {
+                return {
+                    data: { errors: validationErrors },
+                    status: 400,
+                    message: "Validation errors",
+                };
+            }
+
+            const bulkCategories = await Category.bulkCreate(categories, {
+                validate: true,
+                returning: true,
+            });
+
+            return {
+                data: bulkCategories,
+                status: 201,
+                message: `${bulkCategories.length} categories created successfully`,
+            };
+        } catch (error: unknown) {
+            return {
+                data: null,
+                status: 500,
+                message: "Error creating bulk categories: " + error,
+            };
+        }
+    }
+
+    public static async updateCategory(id: string, { name, description }: { name: string, description: string }): Promise<Response> {
+        try {
+            const { error } = updateCategorySchema.safeParse({ id, name, description });
             if (error) {
                 return {
                     data: null,
@@ -107,25 +153,17 @@ class CategoryService {
                     message: error.message,
                 };
             }
-            const updatedCategory = await Category.update(category, { where: { id } });
-            if (!updatedCategory) {
-                return {
-                    data: null,
-                    status: 404,
-                    message: "Category not found",
-                };
-            }
+            const updatedCategory = await Category.update({ name, description }, { where: { id: id } });
             return {
                 data: updatedCategory,
                 status: 200,
                 message: "Category updated successfully",
-            };
-        }
-        catch (error: unknown) {
+            }; 
+        } catch (error: unknown) {
             return {
                 data: null,
                 status: 500,
-                message: "Error updating category: " + error,
+                message: "Error updating category: " + error as string,
             };
         }
     }

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
     "@types/cors": "^2.8.19",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/uuid": "^10.0.0",

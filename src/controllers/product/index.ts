@@ -37,23 +37,23 @@ class ProductController {
     public static async getProductById(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            const product = await Product.findByPk(id);
-            res.json(product);
+            const product = await ProductsService.getProductById(id);
+            res.status(product.status).json(product);
             return;
         } catch (error: unknown) {
-            res.status(500).json({ message: "Error getting product", error: error });
+            res.status(500).json({ status: 500, message: "Error getting product", error: error });
             return;
         }
     }
 
     public static async createProduct(req: Request, res: Response) {
         try {
-            const { name, price, image, category_id } = req.body;
-            const product = await Product.create({ name, price, image, category_id });
-            res.json(product);
+            const { name, price, description, image, category_id } = req.body;
+            const product = await ProductsService.createProduct({ name, price, description, image, category_id });
+            res.status(product.status).json(product);
             return;
         } catch (error: unknown) {
-            res.status(500).json({ message: "Error creating product", error: error });
+            res.status(500).json({ status: 500, message: "Error creating product", error: error });
             return;
         }
     }
@@ -61,12 +61,12 @@ class ProductController {
     public static async updateProduct(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            const { name, price, image, category_id } = req.body;
-            const product = await Product.update({ name, price, image, category_id }, { where: { id } });
-            res.json(product);
+            const { name, price, description, image, category_id } = req.body;
+            const product = await ProductsService.updateProduct(id, { name, price, description, image, category_id });
+            res.status(product.status).json(product);
             return;
         } catch (error: unknown) {
-            res.status(500).json({ message: "Error updating product", error: error });
+            res.status(500).json({ status: 500, message: "Error updating product", error: error });
             return;
         }
     }
@@ -74,40 +74,8 @@ class ProductController {
     public static async createBulkProducts(req: Request, res: Response) {
         try {
             const { products } = req.body;
-
-            if (!Array.isArray(products) || products.length === 0) {
-                return res.status(400).json({ 
-                    status: 400, 
-                    message: "Products must be a non-empty array" 
-                });
-            }
-            const { createProductSchema } = await import("./schema/product");
-            const validationErrors: string[] = [];
-            
-            products.forEach((product: any, index: number) => {
-                const result = createProductSchema.safeParse(product);
-                if (!result.success) {
-                    validationErrors.push(`Product at index ${index}: ${result.error.issues.map((e: any) => e.message).join(", ")}`);
-                }
-            });
-
-            if (validationErrors.length > 0) {
-                return res.status(400).json({ 
-                    status: 400, 
-                    message: "Validation errors", 
-                    errors: validationErrors 
-                });
-            }
-            const bulkProducts = await Product.bulkCreate(products, {
-                validate: true,
-                returning: true,
-            });
-
-            return res.status(201).json({ 
-                status: 201,
-                message: `${bulkProducts.length} products created successfully`,
-                data: bulkProducts 
-            });
+            const result = await ProductsService.createBulkProducts(products);
+            return res.status(result.status).json(result);
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             return res.status(500).json({ 
@@ -121,11 +89,12 @@ class ProductController {
     public static async deleteProduct(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            await Product.destroy({ where: { id } });
-            res.json({ message: "Product deleted successfully" });
+            const product = await ProductsService.deleteProduct(id);
+            res.status(product.status).json(product);
+            res.status(200).json({ status: 200, message: "Product deleted successfully" });
             return;
         } catch (error: unknown) {
-            res.status(500).json({ message: "Error deleting product", error: error });
+            res.status(500).json({ status: 500, message: "Error deleting product", error: error });
             return;
         }
     }
