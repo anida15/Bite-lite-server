@@ -34,7 +34,7 @@ class ProductsService {
             }
 
             if (search) {
-                whereClause.name = { [Op.like]: `%${search}%` };
+                whereClause.name = { [Op.iLike]: `%${search}%` };
             }
 
             const total = await Product.count({
