@@ -82,6 +82,16 @@ Product.init(
     timestamps: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
+    indexes: [
+      {
+        name: "idx_product_name",
+        fields: ["name"],
+      },
+      {
+        name: "idx_product_name_lower",
+        fields: [sequelize.fn("lower", sequelize.col("name"))],
+      },
+    ],
   }
 );
 

@@ -8,6 +8,7 @@ import products from "./routes/products";
 import categories from "./routes/categories";
 import sales from "./routes/sales";
 
+// to create the tables
 // import Product from "./models/Product";
 // import Category from "./models/Category";
 // import Sale from "./models/Sale";
@@ -80,10 +81,14 @@ sequelize
   .authenticate()
   .then(async () => {
     console.log("Connection has been established successfully.");
+
+
+    // to create the tables
     // await Category.sync( { alter: true });
     // await Product.sync( { alter: true });
-  
     // await Sale.sync( { alter: true });
+
+
     app.listen(Number(PORT), HOST, () => {
       console.log(`Server running at http://${HOST}:${PORT}`);
     });
