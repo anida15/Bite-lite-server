@@ -7,11 +7,13 @@ import sequelize from "./config/database";
 import products from "./routes/products";
 import categories from "./routes/categories";
 import sales from "./routes/sales";
+import shareholders from "./routes/shareholders";
 
 // to create the tables
 // import Product from "./models/Product";
 // import Category from "./models/Category";
 // import Sale from "./models/Sale";
+import Shareholder from "./models/Shareholder";
  
 
 declare global {
@@ -76,6 +78,7 @@ app.use(express.json());
 app.use("/products", products);
 app.use("/categories", categories);
 app.use("/sales", sales);
+app.use("/shareholders", shareholders);
  
 sequelize
   .authenticate()
@@ -87,6 +90,7 @@ sequelize
     // await Category.sync( { alter: true });
     // await Product.sync( { alter: true });
     // await Sale.sync( { alter: true });
+    await Shareholder.sync({ alter: true });
 
 
     app.listen(Number(PORT), HOST, () => {

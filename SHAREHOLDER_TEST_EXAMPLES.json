@@ -1,0 +1,140 @@
+{
+  "description": "Sample requests for testing the Shareholder API",
+  
+  "create_shareholder_minimum": {
+    "method": "POST",
+    "url": "http://localhost:4001/shareholders",
+    "body": {
+      "first_name": "John",
+      "surname": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "+1234567890",
+      "address": "123 Main Street, New York, NY 10001",
+      "share_amount": 100,
+      "identification_type": "passport",
+      "identification_number": "AB123456",
+      "nationality": "USA",
+      "date_of_birth": "1990-01-15"
+    }
+  },
+
+  "create_shareholder_with_middle_name": {
+    "method": "POST",
+    "url": "http://localhost:4001/shareholders",
+    "body": {
+      "first_name": "Jane",
+      "middle_name": "Elizabeth",
+      "surname": "Smith",
+      "email": "jane.smith@example.com",
+      "phone": "+1555000111",
+      "address": "456 Park Avenue, Los Angeles, CA 90001",
+      "share_amount": 500,
+      "payment_status": "pending",
+      "identification_type": "drivers_license",
+      "identification_number": "DL987654321",
+      "nationality": "USA",
+      "date_of_birth": "1985-05-20",
+      "agreement_signed": true,
+      "notes": "VIP investor, early bird bonus"
+    }
+  },
+
+  "create_shareholder_large_investment": {
+    "method": "POST",
+    "url": "http://localhost:4001/shareholders",
+    "body": {
+      "first_name": "Michael",
+      "middle_name": "James",
+      "surname": "Johnson",
+      "email": "michael.johnson@corporate.com",
+      "phone": "+1555000222",
+      "address": "789 Business Plaza, Suite 1000, Chicago, IL 60601",
+      "share_amount": 10000,
+      "identification_type": "passport",
+      "identification_number": "CD789012",
+      "nationality": "Canada",
+      "date_of_birth": "1975-11-30",
+      "agreement_signed": true,
+      "notes": "Corporate investor - 100 shares"
+    }
+  },
+
+  "get_all_shareholders": {
+    "method": "GET",
+    "url": "http://localhost:4001/shareholders?page=1&limit=10"
+  },
+
+  "get_shareholder_by_id": {
+    "method": "GET",
+    "url": "http://localhost:4001/shareholders/{shareholder_id}",
+    "note": "Replace {shareholder_id} with actual UUID"
+  },
+
+  "update_payment_to_completed": {
+    "method": "PUT",
+    "url": "http://localhost:4001/shareholders/{shareholder_id}",
+    "body": {
+      "payment_status": "completed",
+      "agreement_signed": true,
+      "notes": "Payment verified and confirmed"
+    }
+  },
+
+  "update_share_amount": {
+    "method": "PUT",
+    "url": "http://localhost:4001/shareholders/{shareholder_id}",
+    "body": {
+      "share_amount": 750,
+      "notes": "Increased investment from $500 to $750"
+    },
+    "note": "number_of_shares will auto-update from 5 to 7"
+  },
+
+  "update_contact_info": {
+    "method": "PUT",
+    "url": "http://localhost:4001/shareholders/{shareholder_id}",
+    "body": {
+      "phone": "+1555999888",
+      "address": "New address after relocation",
+      "email": "newemail@example.com"
+    }
+  },
+
+  "delete_shareholder": {
+    "method": "DELETE",
+    "url": "http://localhost:4001/shareholders/{shareholder_id}"
+  },
+
+  "validation_errors": {
+    "share_below_minimum": {
+      "error": "Minimum share purchase amount is $100",
+      "body": {
+        "share_amount": 50
+      }
+    },
+    "invalid_email": {
+      "error": "Must be a valid email address",
+      "body": {
+        "email": "invalid-email"
+      }
+    },
+    "invalid_identification_type": {
+      "error": "Invalid identification type",
+      "body": {
+        "identification_type": "social_security"
+      }
+    }
+  },
+
+  "curl_examples": {
+    "create": "curl -X POST http://localhost:4001/shareholders -H \"Content-Type: application/json\" -d '{\"first_name\":\"Alice\",\"surname\":\"Brown\",\"email\":\"alice@example.com\",\"phone\":\"+1555000333\",\"address\":\"123 Oak St\",\"share_amount\":250,\"identification_type\":\"national_id\",\"identification_number\":\"NID123456\",\"nationality\":\"USA\",\"date_of_birth\":\"1992-03-10\"}'",
+    
+    "get_all": "curl http://localhost:4001/shareholders?page=1&limit=10",
+    
+    "get_by_id": "curl http://localhost:4001/shareholders/{id}",
+    
+    "update": "curl -X PUT http://localhost:4001/shareholders/{id} -H \"Content-Type: application/json\" -d '{\"payment_status\":\"completed\"}'",
+    
+    "delete": "curl -X DELETE http://localhost:4001/shareholders/{id}"
+  }
+}
