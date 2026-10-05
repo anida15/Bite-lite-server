@@ -30,6 +30,7 @@ const app = express();
 const PORT = process.env.PORT || 4001;
 const HOST = process.env.HOST || "localhost";
 
+
  
 const allowedOrigins = process.env.ALLOW_ORIGINS
   ? process.env.ALLOW_ORIGINS.split(",")
