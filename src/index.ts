@@ -78,7 +78,7 @@ app.use(express.json());
 app.get("/", (_req, res) => {
   res.status(200).json({
     status: "ok",
-    message: "Bite Lite server is live.",
+    message: "Bite Lite server is live. Up and running.",
   });
 });
 
