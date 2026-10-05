@@ -75,7 +75,13 @@ app.use(globalLimiter);
 app.use(cors());
 app.use(express.json());
 
- 
+app.get("/", (_req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "Bite Lite server is live.",
+  });
+});
+
 app.use("/products", products);
 app.use("/categories", categories);
 app.use("/sales", sales);
