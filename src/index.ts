@@ -81,7 +81,7 @@ app.get("/", (_req, res) => {
   res.status(200).json({
     status: "ok",
     message: "Bite Lite server is live. Test By F. K",
-  });
+  }); 
 });
 
 app.use("/products", products);
