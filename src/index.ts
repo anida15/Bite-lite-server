@@ -87,7 +87,7 @@ app.get("/", (_req, res) => {
 
 
 
-app.use("/products", products);
+ap p.use("/products", products);
 app.use("/categories", categories);
 app.use("/sales", sales);
 app.use("/shareholders", shareholders);
