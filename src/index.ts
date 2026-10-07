@@ -84,6 +84,8 @@ app.get("/", (_req, res) => {
   }); 
 });
 
+ 
+
 
 
 app.use("/products", products);
@@ -94,7 +96,7 @@ app.use("/shareholders", shareholders);
 sequelize
   .authenticate()
   .then(async () => {
-    console.log("Connection has been established successfully.");
+    console.log("Connection has been e stablished successfully.");
 
 
     // to create the tables
