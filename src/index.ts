@@ -82,7 +82,7 @@ app.get("/", (_req, res) => {
     status: "ok",
     message: "Bite Lite server is live.  ",
   }); 
-});
+})
 
 
 app.use("/products", products);
