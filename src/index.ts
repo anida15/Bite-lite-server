@@ -84,6 +84,8 @@ app.get("/", (_req, res) => {
   }); 
 });
 
+
+
 app.use("/products", products);
 app.use("/categories", categories);
 app.use("/sales", sales);
