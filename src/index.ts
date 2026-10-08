@@ -14,8 +14,6 @@ import shareholders from "./routes/shareholders";
 // import Category from "./models/Category";
 // import Sale from "./models/Sale";
 import Shareholder from "./models/Shareholder";
- 
-
 
 
 
