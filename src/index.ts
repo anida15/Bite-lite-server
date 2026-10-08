@@ -12,8 +12,6 @@ import shareholders from "./routes/shareholders";
 
 
 
-
-
 // to create the tables
 // import Product from "./models/Product";
 // import Category from "./models/Category";
