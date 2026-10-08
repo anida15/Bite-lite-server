@@ -20,6 +20,8 @@ import Shareholder from "./models/Shareholder";
 
 
 
+
+
 declare global {
   namespace Express {
     interface Request {
