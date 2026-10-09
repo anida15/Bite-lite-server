@@ -14,8 +14,7 @@ import shareholders from "./routes/shareholders";
 // import Category from "./models/Category";
 // import Sale from "./models/Sale";
 import Shareholder from "./models/Shareholder";
-
-
+ 
 
 declare global {
   namespace Express {
@@ -74,6 +73,7 @@ const healthCheckLimiter = rateLimit({
 });
 
 
+
 app.use(globalLimiter);
 app.use(cors());
 app.use(express.json());
@@ -81,13 +81,16 @@ app.use(express.json());
 app.get("/", (_req, res) => {
   res.status(200).json({
     status: "ok",
-    message: "Bite Lite server is live.  ",
-  }); 
-})
+    message: "Bite lite server is ", 
+  });
+});
 
 
 
 
+
+
+(sequelize as any).options.logging = console.log;
 app.use("/products", products);
 app.use("/categories", categories);
 app.use("/sales", sales);
@@ -96,8 +99,7 @@ app.use("/shareholders", shareholders);
 sequelize
   .authenticate()
   .then(async () => {
-    console.log("Connection has been e stablished successfully.");
-
+    console.log("Connection has been established successfully.");
 
     // to create the tables
     // await Category.sync( { alter: true });
