@@ -15,7 +15,6 @@ import shareholders from "./routes/shareholders";
 // import Sale from "./models/Sale";
 import Shareholder from "./models/Shareholder";
  
-
 declare global {
   namespace Express {
     interface Request {
