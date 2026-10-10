@@ -13,7 +13,7 @@ import shareholders from "./routes/shareholders";
 // import Product from "./models/Product";
 // import Category from "./models/Category";
 // import Sale from "./models/Sale";
-import Shareholder from "./models/Shareholder";
+// import Shareholder from "./models/Shareholder";
  
 declare global {
   namespace Express {
@@ -107,7 +107,7 @@ sequelize
     // await Category.sync( { alter: true });
     // await Product.sync( { alter: true });
     // await Sale.sync( { alter: true });
-    await Shareholder.sync({ alter: true });
+    // await Shareholder.sync({ alter: true });
 
 
     app.listen(Number(PORT), HOST, () => {

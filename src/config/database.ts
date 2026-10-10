@@ -12,10 +12,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL || "", {
   dialect: "postgres",
   dialectModule: require("pg"),
   dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
+    ssl: false,
   },
   pool: {
     max: 10,
@@ -27,3 +24,4 @@ const sequelize = new Sequelize(process.env.DATABASE_URL || "", {
 });
 
 export default sequelize;
+ 
